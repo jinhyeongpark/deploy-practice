@@ -4,7 +4,7 @@ services:
     build: .
     container_name: deploy-practice-app
     restart: always
-    ports:
+    expose:
       - "8080" # 외부 노출 대신 Nginx와 내부 통신만 하도록 변경 추천
     environment:
       - DB_HOST=db
@@ -41,6 +41,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 24h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     depends_on:
       - app
 
