@@ -5,7 +5,7 @@ services:
     container_name: deploy-practice-app
     restart: always
     ports:
-      - "8080:8080"
+      - "8080" # 외부 노출 대신 Nginx와 내부 통신만 하도록 변경 추천
     environment:
       - DB_HOST=db
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/practice?serverTimezone=Asia/Seoul
@@ -30,3 +30,24 @@ services:
       timeout: 5s
       retries: 10
       interval: 5s
+
+  nginx:
+    image: nginx:latest
+    container_name: deploy-practice-nginx
+    ports:
+      - "80:80"   # HTTP (인증용)
+      - "443:443" # HTTPS (서비스용)
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - app
+
+  certbot:
+    image: certbot/certbot
+    container_name: deploy-practice-certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
