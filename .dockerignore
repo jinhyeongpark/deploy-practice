@@ -1,0 +1,5 @@
+# .dockerignore
+mysql_data/
+.git/
+build/
+.gradle/

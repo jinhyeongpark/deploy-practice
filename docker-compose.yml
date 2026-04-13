@@ -1,0 +1,32 @@
+services:
+  # 우리 스프링 앱 서비스
+  app:
+    build: .
+    container_name: deploy-practice-app
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/practice?serverTimezone=Asia/Seoul
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DB_PW}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # MySQL DB 서비스
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306" # 보통 이미 로컬 3306을 사용중일 것을 대비
+    environment:
+      - MYSQL_DATABASE=practice
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PW}
+    volumes:
+      - ./mysql_data:/var/lib/mysql # 데이터 유실 방지 (볼륨 마운트)
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+      interval: 5s
