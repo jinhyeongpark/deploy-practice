@@ -77,6 +77,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            if [ ! -d "deploy-practice" ]; then
+              echo "첫 배포입니다. 클론을 시작합니다..."
+              git clone https://github.com/${{ github.repository }}.git
+            fi
+            
             cd deploy-practice
             git pull origin ${{ github.ref_name }}
             
@@ -88,9 +93,9 @@ jobs:
             EOF
             
             # 2. 컨테이너 갱신
-            docker compose down
+            docker compose down || true
             docker compose pull
-            docker compose up -d
+            docker compose up -d --build
             
             # 3. 프리티어 용량 관리를 위한 정리 (중요!)
             docker image prune -f
