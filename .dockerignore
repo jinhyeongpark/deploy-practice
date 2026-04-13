@@ -3,3 +3,5 @@ mysql_data/
 .git/
 build/
 .gradle/
+data
+nginx/conf.d
