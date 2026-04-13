@@ -1,7 +1,9 @@
 services:
   # 우리 스프링 앱 서비스
   app:
-    build: .
+    # build: .
+    image: ${DOCKERHUB_USERNAME}/deploy-practice-app:latest
+
     container_name: deploy-practice-app
     restart: always
     expose:

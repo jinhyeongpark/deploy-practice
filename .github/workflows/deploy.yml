@@ -87,6 +87,7 @@ jobs:
             
             # 1. 환경변수 파일 생성 
             cat > .env << EOF
+            DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             SPRING_DB_PW=${{ secrets.SPRING_DB_PW }}
             MYSQL_ROOT_PW=${{ secrets.MYSQL_ROOT_PW }}
             TZ=Asia/Seoul
@@ -95,7 +96,7 @@ jobs:
             # 2. 컨테이너 갱신
             docker compose down || true
             docker compose pull
-            docker compose up -d --build
+            docker compose up -d 
             
             # 3. 프리티어 용량 관리를 위한 정리 (중요!)
             docker image prune -f
