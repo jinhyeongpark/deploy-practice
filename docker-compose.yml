@@ -41,8 +41,8 @@ services:
       - "443:443" # HTTPS (서비스용)
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ../data/certbot/conf:/etc/letsencrypt
+      - ../data/certbot/www:/var/www/certbot
     command: "/bin/sh -c 'while :; do sleep 24h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     depends_on:
       - app
@@ -51,6 +51,6 @@ services:
     image: certbot/certbot
     container_name: deploy-practice-certbot
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ../data/certbot/conf:/etc/letsencrypt
+      - ../data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
