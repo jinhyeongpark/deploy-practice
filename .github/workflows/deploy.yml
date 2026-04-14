@@ -80,6 +80,7 @@ jobs:
             sudo docker compose version
             if [ ! -f "deploy-practice/docker-compose.yml" ]; then
               echo "첫 배포입니다. 클론을 시작합니다..."
+              rm -rf deploy-practice
               git clone https://github.com/${{ github.repository }}.git deploy-practice
             fi
             
