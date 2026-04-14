@@ -78,9 +78,9 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             sudo docker compose version
-            if [ ! -d "deploy-practice" ]; then
+            if [ ! -f "deploy-practice/docker-compose.yml" ]; then
               echo "첫 배포입니다. 클론을 시작합니다..."
-              git clone https://github.com/${{ github.repository }}.git
+              git clone https://github.com/${{ github.repository }}.git deploy-practice
             fi
             
             cd deploy-practice
