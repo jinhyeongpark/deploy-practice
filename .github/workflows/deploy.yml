@@ -94,9 +94,9 @@ jobs:
             EOF
             
             # 2. 컨테이너 갱신
-            docker compose down || true
-            docker compose pull
-            docker compose up -d 
+            sudo docker compose down || true
+            sudo docker compose pull
+            sudo docker compose up -d 
             
             # 3. 프리티어 용량 관리를 위한 정리 (중요!)
-            docker image prune -f
+            sudo docker image prune -f
